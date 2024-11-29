@@ -25,10 +25,22 @@
 
 #include "sbus.h"
 
+#if defined(ESP32)
+
+/* SBUS object, reading SBUS */
+bfs::SbusRx sbus_rx(&Serial2, 16, 17, true);
+/* SBUS object, writing SBUS */
+bfs::SbusTx sbus_tx(&Serial2, 16, 17, true);
+
+#else
+
 /* SBUS object, reading SBUS */
 bfs::SbusRx sbus_rx(&Serial2);
 /* SBUS object, writing SBUS */
 bfs::SbusTx sbus_tx(&Serial2);
+
+#endif
+
 /* SBUS data */
 bfs::SbusData data;
 
