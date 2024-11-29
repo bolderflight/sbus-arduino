@@ -25,7 +25,7 @@ Note that lost frame is indicated when a frame is lost between the transmitter a
 
 A variation on SBUS called "Fast SBUS" has started to be used. This uses a baudrate of 200000 and a quicker update rate.
 
-A further variation is known as "M-Bus", found on Microzone Receivers (e.g. MC7RB v2 receiver, for use with the Microzone MC6C-M transmitter)
+A further variation is known as "M-Bus", found on Microzone Receivers (e.g. MC7RB v2 receiver, for use with the Microzone MC6C-M transmitter).  It operates at the same baudrate of 100000 as SBus, and also uses inverted serial logic.
 
 **Note on CH17 and CH18:** Channel 17 and channel 18 are digital on/off channels. These are not universally available on all SBUS receivers and servos.
 
