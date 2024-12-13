@@ -28,6 +28,7 @@
 
 #if defined(ARDUINO)
 #include <Arduino.h>
+#include <AltSoftSerial.h>
 #else
 #include <cstddef>
 #include <cstdint>
@@ -59,6 +60,11 @@ class SbusRx {
   SbusRx(HardwareSerial *bus, const bool inv, const bool fast) : uart_(bus),
                                                                  inv_(inv),
                                                                  fast_(fast) {}
+  explicit SbusRx(AltSoftSerial *bus) : soft_uart_(bus) {}
+  SbusRx(AltSoftSerial *bus, const bool inv) : soft_uart_(bus), inv_(inv) {}
+  SbusRx(AltSoftSerial *bus, const bool inv, const bool fast) : soft_uart_(bus),
+                                                                inv_(inv),
+                                                                fast_(fast) {}
   #endif
   void Begin();
   bool Read();
@@ -66,7 +72,8 @@ class SbusRx {
 
  private:
   /* Communication */
-  HardwareSerial *uart_;
+  HardwareSerial *uart_ = nullptr;
+  AltSoftSerial *soft_uart_ = nullptr;
   bool inv_ = true;
   bool fast_ = false;
   #if defined(ESP32)
@@ -113,6 +120,11 @@ class SbusTx {
   SbusTx(HardwareSerial *bus, const bool inv, const bool fast) : uart_(bus),
                                                                  inv_(inv),
                                                                  fast_(fast) {}
+  explicit SbusTx(AltSoftSerial *bus) : soft_uart_(bus) {}
+  SbusTx(AltSoftSerial *bus, const bool inv) : soft_uart_(bus), inv_(inv) {}
+  SbusTx(AltSoftSerial *bus, const bool inv, const bool fast) : soft_uart_(bus),
+                                                                inv_(inv),
+                                                                fast_(fast) {}
   #endif
   void Begin();
   void Write();
@@ -121,7 +133,8 @@ class SbusTx {
 
  private:
   /* Communication */
-  HardwareSerial *uart_;
+  HardwareSerial *uart_ = nullptr;
+  AltSoftSerial *soft_uart_ = nullptr;
   bool inv_ = true;
   bool fast_ = false;
   #if defined(ESP32)

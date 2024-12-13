@@ -23,12 +23,16 @@
 * IN THE SOFTWARE.
 */
 
+#include <AltSoftSerial.h>
 #include "sbus.h"
 
+/* AltSoftSerial object for SBUS communication */
+AltSoftSerial altSerial;
+
 /* SBUS object, reading SBUS */
-bfs::SbusRx sbus_rx(&Serial2);
+bfs::SbusRx sbus_rx(&altSerial);
 /* SBUS object, writing SBUS */
-bfs::SbusTx sbus_tx(&Serial2);
+bfs::SbusTx sbus_tx(&altSerial);
 /* SBUS data */
 bfs::SbusData data;
 
