@@ -26,6 +26,7 @@
 #include "sbus.h"  // NOLINT
 #if defined(ARDUINO)
 #include <Arduino.h>
+#include <AltSoftSerial.h>
 #else
 #include <cstddef>
 #include <cstdint>
@@ -74,10 +75,18 @@ void SbusRx::Begin() {
   uart_->begin(baud_, SERIAL_8E2, rxpin_, txpin_, inv_);
   /* Everything else, with a hardware inverter */
   #else
-  uart_->begin(baud_, SERIAL_8E2);
+  if (uart_ != nullptr) {
+    uart_->begin(baud_, SERIAL_8E2);
+  } else if (soft_uart_ != nullptr) {
+    soft_uart_->begin(baud_);
+  }
   #endif
   /* flush the bus */
-  uart_->flush();
+  if (uart_ != nullptr) {
+    uart_->flush();
+  } else if (soft_uart_ != nullptr) {
+    soft_uart_->flush();
+  }
 }
 
 bool SbusRx::Read() {
@@ -87,14 +96,18 @@ bool SbusRx::Read() {
     if (Parse()) {
       new_data_ = true;
     }
-  } while (uart_->available());
+  } while ((uart_ != nullptr && uart_->available()) || (soft_uart_ != nullptr && soft_uart_->available()));
   return new_data_;
 }
 
 bool SbusRx::Parse() {
   /* Parse messages */
-  while (uart_->available()) {
-    cur_byte_ = uart_->read();
+  while ((uart_ != nullptr && uart_->available()) || (soft_uart_ != nullptr && soft_uart_->available())) {
+    if (uart_ != nullptr) {
+      cur_byte_ = uart_->read();
+    } else if (soft_uart_ != nullptr) {
+      cur_byte_ = soft_uart_->read();
+    }
     if (state_ == 0) {
       if ((cur_byte_ == HEADER_) && ((prev_byte_ == FOOTER_) ||
          ((prev_byte_ & 0x0F) == FOOTER2_))) {
@@ -225,7 +238,11 @@ void SbusTx::Begin() {
   uart_->begin(baud_, SERIAL_8E2, rxpin_, txpin_, inv_);
   /* Everything else, with a hardware inverter */
   #else
-  uart_->begin(baud_, SERIAL_8E2);
+  if (uart_ != nullptr) {
+    uart_->begin(baud_, SERIAL_8E2);
+  } else if (soft_uart_ != nullptr) {
+    soft_uart_->begin(baud_);
+  }
   #endif
 }
 
@@ -284,7 +301,11 @@ void SbusTx::Write() {
   serial_timer.priority(255);
   serial_timer.begin(SendByte, 130);
   #else
-  uart_->write(buf_, sizeof(buf_));
+  if (uart_ != nullptr) {
+    uart_->write(buf_, sizeof(buf_));
+  } else if (soft_uart_ != nullptr) {
+    soft_uart_->write(buf_, sizeof(buf_));
+  }
   #endif
 }
 

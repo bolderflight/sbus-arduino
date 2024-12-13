@@ -120,6 +120,20 @@ bfs::SbusRx sbus(&Serial1, false);
 
 **(ESP32 ONLY) SbusRx(HardwareSerial &ast;bus, const int8_t rxpin, const int8_t txpin, const bool inv, const bool fast)** Same as the constructor above, but enables selecting the fast SBUS baudrate (200000) if *fast* is true.
 
+**SbusRx(AltSoftSerial &ast;bus)** Creates an *SbusRx* object. A pointer to the *AltSoftSerial* object corresponding to the software serial port used is passed. The RX pin of the software serial port will receive SBUS packets.
+
+```C++
+bfs::SbusRx sbus(&altSerial);
+```
+
+**SbusRx(AltSoftSerial &ast;bus, const bool inv)** Creates an *SbusRx* object. A pointer to the *AltSoftSerial* object corresponding to the software serial port used is passed along with a second parameter, *inv*, which sets whether inverted serial is used. If *inv* is true, the signal is the standard inverted SBUS, otherwise it is non-inverted SBUS.
+
+```C++
+bfs::SbusRx sbus(&altSerial, false);
+```
+
+**SbusRx(AltSoftSerial &ast;bus, const bool inv, const bool fast)** Same as the constructor above, but enables selecting the fast SBUS baudrate (200000) if *fast* is true.
+
 **void Begin()** Initializes SBUS communication.
 
 ```C++
@@ -157,7 +171,23 @@ bfs::SbusTx sbus(&Serial1);
 bfs::SbusTx sbus(&Serial1, false);
 ```
 
+**SbusTx(HardwareSerial &ast;bus, const bool inv, const bool fast)** Same as the constructor above, but enables selecting the fast SBUS baudrate (200000) if *fast* is true.
+
 **(ESP32 ONLY) SbusTx(HardwareSerial &ast;bus, const int8_t rxpin, const int8_t txpin, const bool inv)** Creates an *SbusTx* object. A pointer to the *Serial* object corresponding to the serial port used is passed along with the RX pin number (*rxpin*), TX pin number (*txpin*), and whether inverted serial is used (*inv*). If *inv* is true, the signal is the standard inverted SBUS, otherwise it is non-inverted SBUS.
+
+**SbusTx(AltSoftSerial &ast;bus)** Creates an *SbusTx* object. A pointer to the *AltSoftSerial* object corresponding to the software serial port used is passed. The TX pin of the software serial port will receive SBUS packets.
+
+```C++
+bfs::SbusTx sbus(&altSerial);
+```
+
+**SbusTx(AltSoftSerial &ast;bus, const bool inv)** Creates an *SbusTx* object. A pointer to the *AltSoftSerial* object corresponding to the software serial port used is passed along with a second parameter, *inv*, which sets whether inverted serial is used. If *inv* is true, the signal is the standard inverted SBUS, otherwise it is non-inverted SBUS.
+
+```C++
+bfs::SbusTx sbus(&altSerial, false);
+```
+
+**SbusTx(AltSoftSerial &ast;bus, const bool inv, const bool fast)** Same as the constructor above, but enables selecting the fast SBUS baudrate (200000) if *fast* is true.
 
 **void Begin()** Initializes SBUS communication.
 
